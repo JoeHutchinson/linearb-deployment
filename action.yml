@@ -1,0 +1,45 @@
+# action.yml
+name: "LinearB deployment detection action"
+description: "Report your deployment to LinearB to track your deployment activity"
+branding:
+  icon: 'bell'  
+  color: 'green'
+inputs:
+  repo_url:
+    description: "The git repository url. Pattern: ^https://[a-zA-Z0-9./+^@_-]{15,250}$ should have .git suffix for qualified urls"
+    required: true
+  api_token:
+    description: "LinearB API token"
+    required: true
+  ref_name:
+    description: "Ref name of the release, accepts any Git ref (i.e. commit short or long sha/tag name). Pattern:^[!\"#\$%&\'()+,-0-9;<=>\@A-Z]_`a-z{"
+    required: true
+  timestamp:
+    description: "The deployment or custom pre-deployment stage occurred at this specific time"
+    required: false
+  stage:
+    description: "The key of the custom pre-deployment stage"
+    required: false
+  services:
+    description: "The list of LinearB services names monitoring this"
+    required: false
+  
+runs:
+  using: "composite"
+  steps:
+    - id: date
+      run: echo "::set-output name=date::$(date +'%s')"
+      shell: bash
+    - run: |
+        curl -X POST \
+          --header 'x-api-key: ${{ inputs.api_token }}' \
+          --header 'Content-Type: application/json' \
+          -d '{
+            "repo_url": "${{ inputs.repo_url }}",
+            "ref_name": "${{ inputs.ref_name }}",
+            "timestamp": "${{ inputs.timestamp }}",
+            "stage": "${{ inputs.stage }}"
+            "services": "${{ inputs.services }}"
+          }' \
+          https://public-api.linearb.io/api/v1/deployments
+      shell: bash
