@@ -15,7 +15,7 @@ inputs:
     description: "Ref name of the release, accepts any Git ref (i.e. commit short or long sha/tag name)"
     required: true
   timestamp:
-    description: "The deployment or custom pre-deployment stage occurred at this specific time"
+    description: "The deployment or custom pre-deployment stage occurred at this specific time. If not specified uses now"
     required: false
   stage:
     description: "The key of the custom pre-deployment stage"
@@ -27,8 +27,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - id: date
-      run: echo "::set-output name=date::$(date +'%s')"
+    - id: now
+      run: echo "::set-output name=timestamp::$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
       shell: bash
     - run: |
         curl -X POST \
@@ -37,9 +37,9 @@ runs:
           -d '{
             "repo_url": "${{ inputs.repo_url }}",
             "ref_name": "${{ inputs.ref_name }}",
-            "timestamp": "${{ inputs.timestamp }}",
-            "stage": "${{ inputs.stage }}"
-            "services": "${{ inputs.services }}"
+            "timestamp": "${{ inputs.timestamp || steps.now.outputs.timestamp }}",
+            "stage": "${{ inputs.stage }}",
+            "services": ${{ inputs.services }}
           }' \
           https://public-api.linearb.io/api/v1/deployments
       shell: bash
