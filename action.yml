@@ -6,13 +6,13 @@ branding:
   color: 'green'
 inputs:
   repo_url:
-    description: "The git repository url. Pattern: ^https://[a-zA-Z0-9./+^@_-]{15,250}$ should have .git suffix for qualified urls"
+    description: "The git repository url. Should have .git suffix for qualified urls"
     required: true
   api_token:
     description: "LinearB API token"
     required: true
   ref_name:
-    description: "Ref name of the release, accepts any Git ref (i.e. commit short or long sha/tag name). Pattern:^[!\"#\$%&\'()+,-0-9;<=>\@A-Z]_`a-z{"
+    description: "Ref name of the release, accepts any Git ref (i.e. commit short or long sha/tag name)"
     required: true
   timestamp:
     description: "The deployment or custom pre-deployment stage occurred at this specific time"
