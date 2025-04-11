@@ -39,7 +39,7 @@ runs:
             "ref_name": "${{ inputs.ref_name }}",
             "timestamp": "${{ inputs.timestamp }}",
             "stage": "${{ inputs.stage }}"
-            "services": ["${{ inputs.services }}"]
+            "services": "${{ inputs.services }}"
           }' \
           https://public-api.linearb.io/api/v1/deployments
       shell: bash
