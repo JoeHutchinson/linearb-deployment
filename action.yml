@@ -6,7 +6,7 @@ branding:
   color: 'green'
 inputs:
   repo_url:
-    description: "The git repository url. Should have .git suffix for qualified urls"
+    description: "The git repository url. Must match the pattern ^https://[a-zA-Z0-9./+^@_%-]{15,250}$"
     required: true
   api_token:
     description: "LinearB API token"
@@ -28,7 +28,7 @@ runs:
   using: "composite"
   steps:
     - id: now
-      run: echo "::set-output name=timestamp::$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+      run: echo "timestamp=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
       shell: bash
     - run: |
         curl -X POST \
