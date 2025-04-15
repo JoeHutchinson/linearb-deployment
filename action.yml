@@ -31,7 +31,7 @@ runs:
       run: echo "timestamp=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
       shell: bash
     - run: |
-        curl -X POST \
+        curl -s -X POST \
           --header 'x-api-key: ${{ inputs.api_token }}' \
           --header 'Content-Type: application/json' \
           -d '{
